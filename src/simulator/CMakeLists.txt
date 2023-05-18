@@ -45,6 +45,7 @@ if(DEFINED CATKIN_DEVEL_PREFIX)
   find_package(catkin REQUIRED COMPONENTS
     roslib
     roscpp
+    tf
     tf2
     tf2_ros
     tf2_geometry_msgs
@@ -52,6 +53,7 @@ if(DEFINED CATKIN_DEVEL_PREFIX)
     nav_msgs
     sensor_msgs
     geometry_msgs
+    actionlib_msgs
 
     interactive_markers
     visualization_msgs
@@ -60,11 +62,25 @@ if(DEFINED CATKIN_DEVEL_PREFIX)
     message_generation
     )
 
+  add_message_files(
+    FILES
+    gpioread.msg
+    gpiowrite.msg
+    PixyBlock.msg
+    PixyResolution.msg
+    PixyData.msg
+    waypoints.msg
+    seenPoints.msg
+  )
+
+
   generate_messages(
     DEPENDENCIES
     std_msgs
     nav_msgs
     sensor_msgs
+    geometry_msgs
+    actionlib_msgs
     )
 
 
@@ -83,7 +99,7 @@ if(DEFINED CATKIN_DEVEL_PREFIX)
   
 
   # Add the nodes
-  file(GLOB NODE_SRC_FILES node/*.cpp)
+  file(GLOB NODE_SRC_FILES node/*.cpp node/costmaps/*.cpp node/algorithms/*.cpp))
   foreach(_node_file ${NODE_SRC_FILES})
       get_filename_component(_node_name ${_node_file} NAME_WE)
       add_executable(${_node_name} ${_node_file})
