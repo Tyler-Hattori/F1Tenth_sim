@@ -2,7 +2,7 @@
 
 #include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/Point.h>
-#include <pathing/waypoints.h>
+#include <f1tenth_simulator/waypoints.h>
 #include <tf/transform_listener.h>
 #include <std_msgs/String.h>
 
