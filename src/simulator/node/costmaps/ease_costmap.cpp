@@ -63,8 +63,8 @@ public:
       tf::TransformListener listener;
       tf::StampedTransform cam_to_map;
       ros::Time t = ros::Time(0);
-      listener.waitForTransform("map", "base_footprint", t, ros::Duration(30));
-      listener.lookupTransform("map", "base_footprint", t, cam_to_map);
+      listener.waitForTransform("map", "base_link", t, ros::Duration(30));
+      listener.lookupTransform("map", "base_link", t, cam_to_map);
       double th = tf::getYaw(cam_to_map.getRotation());
       double car_x = cam_to_map.getOrigin().getX();// + cm.info.origin.position.x; //- 0.4318*cos(th);
       double car_y = cam_to_map.getOrigin().getY();// + cm.info.origin.position.y; //- 0.4318*sin(th);
