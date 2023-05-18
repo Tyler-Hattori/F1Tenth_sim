@@ -1,0 +1,2 @@
+velma_search_simulator
+-DCATKIN_DEVEL_PREFIX=/home/ubuntu/F1Tenth_sim/devel -DCMAKE_INSTALL_PREFIX=/home/ubuntu/F1Tenth_sim/install -G Unix Makefiles
