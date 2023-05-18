@@ -71,7 +71,7 @@ public:
       costmap_size = int(cm.data.size());
   }
     
-  void view_callback(const pathing::seenPoints & seen_points) {
+  void view_callback(const f1tenth_simulator::seenPoints & seen_points) {
     if (costmap_size > int(seen_points.confidences.size())) {
       double now = ros::Time::now().toSec();
       
