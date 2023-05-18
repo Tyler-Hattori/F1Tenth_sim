@@ -20,7 +20,7 @@ private:
     ros::Timer timer;
     
     bool recall;
-    pathing::waypoints waypoints;
+    f1tenth_simulator::waypoints waypoints;
     int idx;
     
 public:
