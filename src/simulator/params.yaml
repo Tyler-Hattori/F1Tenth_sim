@@ -166,7 +166,7 @@ ground_truth_pose_topic: "/gt_pose"
 keyboard_topic: "/key"
 web_topic: "/web"
 map_topic: "/map"
-scan_topic: "/backwards_scan"
+scan_topic: "/scan"
 odom_topic: "/odom"
 pose_rviz_topic: "/initialpose"
 
