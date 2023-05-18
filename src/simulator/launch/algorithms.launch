@@ -1,0 +1,69 @@
+<launch>
+
+  <!-- Launch the Wall Follower Node -->
+  <node pkg="pathing" name="patroller" type="wall_follow" output="screen">
+    <rosparam command="load" file="$(find pathing)/params.yaml"/>
+  </node>
+
+  <!-- Launch the Gap Follower Node -->
+  <node pkg="pathing" name="advancer" type="gap_follow" output="screen">
+    <rosparam command="load" file="$(find pathing)/params.yaml"/>
+  </node>
+  
+  <!-- Launch the Logger Node -->
+  <node pkg="pathing" name="logger" type="log" output="screen">
+    <rosparam command="load" file="$(find pathing)/params.yaml"/>
+  </node>
+  
+  <group ns="navigation">
+    <!-- Launch the Roomba Node -->
+    <node pkg="pathing" name="wanderer" type="roomba" output="screen">
+      <rosparam command="load" file="$(find pathing)/params.yaml"/>
+    </node>
+    
+    <!-- Launch the Returner Node -->
+    <!-- node pkg="pathing" name="returner" type="return" output="screen"
+      rosparam command="load" file="$(find pathing)/params.yaml"/
+    /node -->
+    
+    <!-- Launch the Recaller Node -->
+    <node pkg="pathing" name="retracer" type="recall" output="screen">
+      <rosparam command="load" file="$(find pathing)/params.yaml"/>
+    </node>
+
+    <!-- Launch the Explorer Node -->
+    <node pkg="pathing" name="explorer" type="explore" output="screen">
+      <rosparam command="load" file="$(find pathing)/params.yaml"/>
+    </node>
+    
+    <group ns="search">
+      <!-- Launch the Searcher Node -->
+      <node pkg="pathing" name="searcher" type="search" output="screen">
+        <rosparam command="load" file="$(find pathing)/params.yaml"/>
+      </node>
+      
+      <!-- Launch the Costmap generators -->
+      <node pkg="pathing" name="consider_search_history" type="time_costmap" output="screen">
+        <rosparam command="load" file="$(find pathing)/params.yaml"/>
+      </node>
+      <node pkg="pathing" name="consider_easiest_path" type="ease_costmap" output="screen">
+        <rosparam command="load" file="$(find pathing)/params.yaml"/>
+      </node>
+      <node pkg="pathing" name="consider_unsearched_area" type="unsearched_area_costmap" output="screen">
+        <rosparam command="load" file="$(find pathing)/params.yaml"/>
+      </node>
+      <node pkg="pathing" name="detect_target_object" type="object_costmap" output="screen">
+        <rosparam command="load" file="$(find pathing)/params.yaml"/>
+      </node>
+      <node pkg="pathing" name="explore_unknown_areas" type="frontier_costmap" output="screen">
+        <rosparam command="load" file="$(find pathing)/params.yaml"/>
+      </node>
+      <!--node pkg="pathing" name="avoid_obstacles" type="obstacle_costmap" output="screen"
+        <rosparam command="load" file="$(find pathing)/params.yaml"/
+      /node-->
+      <node pkg="pathing" name="view" type="view" output="screen">
+        <rosparam command="load" file="$(find pathing)/params.yaml"/>
+      </node>
+    </group>
+  </group>
+</launch>

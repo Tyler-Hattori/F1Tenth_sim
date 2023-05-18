@@ -8,26 +8,24 @@
 #include <sensor_msgs/Joy.h>
 #include <std_msgs/String.h>
 
-#include "f1tenth_simulator/channel.h"
+#include "pathing/channel.h"
 
 class Mux {
 private:
-    // A ROS node
     ros::NodeHandle n;
 
-    // Listen for mux messages
     ros::Subscriber mux_sub;
-
-    // Listen for messages from joystick and keyboard
-    ros::Subscriber joy_sub;
+   
+    //  Sensors
     ros::Subscriber key_sub;
+    ros::Subscriber web_sub;
 
     // Publish drive data to simulator/car
     ros::Publisher drive_pub;
 
     // Mux indices
-    int joy_mux_idx;
     int key_mux_idx;
+    int web_mux_idx;
 
     // Mux controller array
     std::vector<bool> mux_controller;
@@ -42,13 +40,10 @@ private:
     // For printing
     std::vector<bool> prev_mux;
 
-    // Params for joystick calculations
-    int joy_speed_axis, joy_angle_axis;
-    double max_speed, max_steering_angle;
     // For keyboard driving
+    double max_speed, max_steering_angle;
     double prev_key_velocity=0.0;
-    double keyboard_speed;
-    double keyboard_steer_ang;
+    double prev_key_steer = 0.0;
 
 
 public:
@@ -57,11 +52,11 @@ public:
         n = ros::NodeHandle("~");
 
         // get topic names
-        std::string drive_topic, mux_topic, joy_topic, key_topic;
+        std::string drive_topic, mux_topic, key_topic, web_topic;
         n.getParam("drive_topic", drive_topic);
         n.getParam("mux_topic", mux_topic);
-        n.getParam("joy_topic", joy_topic);
         n.getParam("keyboard_topic", key_topic);
+        n.getParam("web_topic", web_topic);
 
         // Make a publisher for drive messages
         drive_pub = n.advertise<ackermann_msgs::AckermannDriveStamped>(drive_topic, 10);
@@ -70,22 +65,16 @@ public:
         mux_sub = n.subscribe(mux_topic, 1, &Mux::mux_callback, this);
 
         // Start subscribers to listen to joy and keyboard messages
-        joy_sub = n.subscribe(joy_topic, 1, &Mux::joy_callback, this);
         key_sub = n.subscribe(key_topic, 1, &Mux::key_callback, this);
+        web_sub = n.subscribe(web_topic, 1, &Mux::web_callback, this);
 
         // get mux indices
-        n.getParam("joy_mux_idx", joy_mux_idx);
         n.getParam("key_mux_idx", key_mux_idx);
+        n.getParam("web_mux_idx", web_mux_idx);
 
-        // get params for joystick calculations
-        n.getParam("joy_speed_axis", joy_speed_axis);
-        n.getParam("joy_angle_axis", joy_angle_axis);
+        // get params for manual control
         n.getParam("max_steering_angle", max_steering_angle);
         n.getParam("max_speed", max_speed);
-
-        // get params for keyboard driving
-        n.getParam("keyboard_speed", keyboard_speed);
-        n.getParam("keyboard_steer_ang", keyboard_steer_ang);
 
         // get size of mux
         n.getParam("mux_size", mux_size);
@@ -102,33 +91,26 @@ public:
         channels = std::vector<Channel*>();
 
         /// Add new channels here:
-        // Random driver example
-        int random_walker_mux_idx;
-        std::string rand_drive_topic;
-        n.getParam("rand_drive_topic", rand_drive_topic);
-        n.getParam("random_walker_mux_idx", random_walker_mux_idx);
-        add_channel(rand_drive_topic, drive_topic, random_walker_mux_idx);
+        // Wall Follower
+        int wall_follower_mux_idx;
+        std::string wall_follow_drive_topic;
+        n.getParam("wall_follow_drive_topic", wall_follow_drive_topic);
+        n.getParam("wall_follower_mux_idx", wall_follower_mux_idx);
+        add_channel(wall_follow_drive_topic, drive_topic, wall_follower_mux_idx);
 
-        // Channel for emergency braking
-        int brake_mux_idx;
-        std::string brake_drive_topic;
-        n.getParam("brake_drive_topic", brake_drive_topic);
-        n.getParam("brake_mux_idx", brake_mux_idx);
-        add_channel(brake_drive_topic, drive_topic, brake_mux_idx);
+        // Gap Follower
+        int gap_follower_mux_idx;
+        std::string gap_follow_drive_topic;
+        n.getParam("gap_follow_drive_topic", gap_follow_drive_topic);
+        n.getParam("gap_follower_mux_idx", gap_follower_mux_idx);
+        add_channel(gap_follow_drive_topic, drive_topic, gap_follower_mux_idx);
 
         // General navigation channel
-        int nav_mux_idx;
-        std::string nav_drive_topic;
-        n.getParam("nav_drive_topic", nav_drive_topic);
-        n.getParam("nav_mux_idx", nav_mux_idx);
-        add_channel(nav_drive_topic, drive_topic, nav_mux_idx);
-
-        // ***Add a channel for a new planner here**
-        // int new_mux_idx;
-        // std::string new_drive_topic;
-        // n.getParam("new_drive_topic", new_drive_topic);
-        // n.getParam("new_mux_idx", new_mux_idx);
-        // add_channel(new_drive_topic, drive_topic, new_mux_idx);
+        int navigator_mux_idx;
+        std::string navigate_drive_topic;
+        n.getParam("navigate_drive_topic", navigate_drive_topic);
+        n.getParam("navigator_mux_idx", navigator_mux_idx);
+        add_channel(navigate_drive_topic, drive_topic, navigator_mux_idx);
     }
 
     void add_channel(std::string channel_name, std::string drive_topic, int mux_idx_) {
@@ -185,17 +167,6 @@ public:
         }
     }
 
-    void joy_callback(const sensor_msgs::Joy & msg) {
-        // make drive message from joystick if turned on
-        if (mux_controller[joy_mux_idx]) {
-            // Calculate desired velocity and steering angle
-            double desired_velocity = max_speed * msg.axes[joy_speed_axis];
-            double desired_steer = max_steering_angle * msg.axes[joy_angle_axis];
-
-            publish_to_drive(desired_velocity, desired_steer);
-        }
-    }
-
     void key_callback(const std_msgs::String & msg) {
         // make drive message from keyboard if turned on 
         if (mux_controller[key_mux_idx]) {
@@ -207,17 +178,81 @@ public:
 
             if (msg.data == "w") {
                 // Forward
-                desired_velocity = keyboard_speed; // a good speed for keyboard control
+                if (prev_key_velocity + 0.15 <= max_speed) desired_velocity = prev_key_velocity + 0.15;
+                if (prev_key_velocity <= 0) desired_velocity = 0.5;
+                desired_steer = prev_key_steer;
             } else if (msg.data == "s") {
                 // Backwards
-                desired_velocity = -keyboard_speed;
+                if (prev_key_velocity - 0.15 >= -max_speed) desired_velocity = prev_key_velocity - 0.15;
+                if (prev_key_velocity >= 0) desired_velocity = -0.5;
+                desired_steer = prev_key_steer;
             } else if (msg.data == "a") {
                 // Steer left and keep speed
-                desired_steer = keyboard_steer_ang;
+                if (prev_key_steer + 0.1 <= max_steering_angle) desired_steer = prev_key_steer + 0.1;
+                else desired_steer = max_steering_angle;
                 desired_velocity = prev_key_velocity;
             } else if (msg.data == "d") {
                 // Steer right and keep speed
-                desired_steer = -keyboard_steer_ang;
+                if (prev_key_steer - 0.1 >= -max_steering_angle) desired_steer = prev_key_steer - 0.1;
+                else desired_steer = -max_steering_angle;
+                desired_velocity = prev_key_velocity;
+            } else if (msg.data == "u") {
+                //steer left at 0.36 rad
+                desired_steer = 0.36;
+                desired_velocity = prev_key_velocity;
+            } else if (msg.data == "i") {
+                //steer right at 0.36
+                desired_steer = -0.36;
+                desired_velocity = prev_key_velocity;
+            } else if ((msg.data == "q")) {
+                //stop the car
+                desired_steer = 0;
+                desired_velocity = 0.75;
+            } else if (msg.data == "b") {
+                // publish zeros to slow down/straighten out car
+            } else {
+                // so that it doesn't constantly publish zeros when you press other keys
+                publish = false;
+                desired_steer=prev_key_steer;
+                desired_velocity=prev_key_velocity;
+            }
+
+            if (publish) {
+                ROS_INFO_STREAM("velocity command: " << desired_velocity << " m/s");
+                ROS_INFO_STREAM("steering command: " << desired_steer << " rad");
+                publish_to_drive(desired_velocity, desired_steer);
+                prev_key_velocity = desired_velocity;
+                prev_key_steer = desired_steer;
+            }
+        }
+    }
+    
+    void web_callback(const std_msgs::String & msg) {
+        // make drive message from web if turned on 
+        if (mux_controller[web_mux_idx]) {
+            // Determine desired velocity and steering angle
+            double desired_velocity = 0.0;
+            double desired_steer = 0.0;
+            
+            bool publish = true;
+
+            if (msg.data == "forward") {
+                if (prev_key_velocity + 0.15 <= max_speed) desired_velocity = prev_key_velocity + 0.15;
+                if (prev_key_velocity < 0) desired_velocity = 0.15;
+                desired_steer = prev_key_steer;
+            } else if (msg.data == "backward") {
+                if (prev_key_velocity - 0.15 >= -max_speed) desired_velocity = prev_key_velocity - 0.15;
+                if (prev_key_velocity > 0) desired_velocity = -0.15;
+                desired_steer = prev_key_steer;
+            } else if (msg.data == "left") {
+                // Steer left and keep speed
+                if (prev_key_steer + 0.1 <= max_steering_angle) desired_steer = prev_key_steer + 0.1;
+                else desired_steer = prev_key_steer;
+                desired_velocity = prev_key_velocity;
+            } else if (msg.data == "right") {
+                // Steer right and keep speed
+                if (prev_key_steer - 0.1 >= -max_steering_angle) desired_steer = prev_key_steer - 0.1;
+                else desired_steer = prev_key_steer;
                 desired_velocity = prev_key_velocity;
             } else if (msg.data == " ") {
                 // publish zeros to slow down/straighten out car
@@ -227,8 +262,11 @@ public:
             }
 
             if (publish) {
+                ROS_INFO_STREAM("velocity command: " << desired_velocity << " m/s");
+                ROS_INFO_STREAM("steering command: " << desired_steer << " rad");
                 publish_to_drive(desired_velocity, desired_steer);
                 prev_key_velocity = desired_velocity;
+                prev_key_steer = desired_steer;
             }
         }
     }
