@@ -23,8 +23,13 @@
 class GapFollow {
 public:
     GapFollow() {
-        pub_ = n_.advertise<ackermann_msgs::AckermannDriveStamped>("/gap_follow_drive", 1000);
-        sub_ = n_.subscribe("/backwards_scan", 1000, &GapFollow::callback, this);
+        n = ros::NodeHandle("~");
+        
+        std::string scan_topic;
+        n.getParam("scan_topic", scan_topic);
+        
+        pub = n.advertise<ackermann_msgs::AckermannDriveStamped>("/gap_follow_drive", 1000);
+        sub = n.subscribe(scan_topic, 1000, &WallFollow::callback, this);
     }
 
     void callback(const sensor_msgs::LaserScan& lidar_info) {
@@ -124,14 +129,14 @@ public:
         } else {
             ackermann_drive_result.drive.speed = 1.5;
         }
-        pub_.publish(ackermann_drive_result);
+        pub.publish(ackermann_drive_result);
         //  ROS_INFO_STREAM(angle);
     }
 
 private:
-    ros::NodeHandle n_;
-    ros::Publisher pub_;
-    ros::Subscriber sub_;
+    ros::NodeHandle n;
+    ros::Publisher pub;
+    ros::Subscriber sub;
     double angle;
     std::vector<double> ranges;
 
