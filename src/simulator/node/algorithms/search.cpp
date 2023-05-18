@@ -2,8 +2,8 @@
 
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/OccupancyGrid.h>
-#include <pathing/PixyData.h>
-#include <pathing/PixyResolution.h>
+#include <f1tenth_simulator/PixyData.h>
+#include <f1tenth_simulator/PixyResolution.h>
 #include <tf/transform_listener.h>
 
 #include <std_msgs/Float32.h>
@@ -27,7 +27,7 @@ private:
   ros::Subscriber object_cm;
   ros::Subscriber unsearched_area_cm;
   ros::Subscriber frontier_cm;
-  ros::Subscriber bucket;
+  // ros::Subscriber bucket;
  
   nav_msgs::OccupancyGrid sum_costmap;
   nav_msgs::OccupancyGrid time_costmap;
@@ -81,7 +81,7 @@ public:
     ease_cm = n.subscribe(ease_costmap, 10, &Search::ease_cm_callback, this);
     object_cm = n.subscribe(object_costmap, 10, &Search::object_cm_callback, this);
     frontier_cm = n.subscribe(frontier_costmap, 10, &Search::frontier_cm_callback, this);
-    bucket = n.subscribe("/bucket_visual", 10, &Search::bucket_callback, this);
+    // bucket = n.subscribe("/bucket_visual", 10, &Search::bucket_callback, this);
     
     n.getParam("search_goal_update_time", pub_time);
     timer = n.createTimer(ros::Duration(pub_time), &Search::timer_callback, this);
@@ -111,7 +111,7 @@ public:
     map_origin_y = 0.0;
   }
   
-  void tranform_and_publish(int height, int width, int x_offset, int y_offset) {
+  /*void tranform_and_publish(int height, int width, int x_offset, int y_offset) {
       double block_area = height*width;
       double pixy_distance = a*pow(block_area, b);
       double pixy_angle = (-x_offset+159)*(c*M_PI/180);
@@ -152,7 +152,7 @@ public:
           tranform_and_publish((int)msg.blocks[0].roi.height, (int)msg.blocks[0].roi.width, (int)msg.blocks[0].roi.x_offset, (int)msg.blocks[0].roi.y_offset);
       }
       //else found = false;
-  }
+  } */
   
   void timer_callback(const ros::TimerEvent&) {
       if (ease_cm_recieved && !found) {
