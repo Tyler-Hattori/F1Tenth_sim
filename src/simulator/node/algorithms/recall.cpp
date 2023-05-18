@@ -1,7 +1,7 @@
 #include <ros/ros.h>
 
 #include <geometry_msgs/PoseStamped.h>
-#include <pathing/waypoints.h>
+#include <f1tenth_simulator/waypoints.h>
 
 #include "math.h"
 
