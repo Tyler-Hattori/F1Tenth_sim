@@ -1,15 +1,86 @@
-# The distance between the front and
-# rear axle of the racecar
+############################################################ SEARCHING ALGORITHM PARAMS ############################################################
+
+search_goal_update_time: 2 # seconds
+
+# costmap weights
+time_cm_weight: 0
+ease_cm_weight: 5
+unsearched_area_cm_weight: 0
+frontier_cm_weight: 1
+
+# costmap attentiveness (%)
+ease_cm_attentiveness: 25
+view_cm_attentiveness: 25
+frontier_cm_attentiveness: 25
+# obstacle_cm_attentiveness: 100
+ua_cm_attentiveness: 25
+
+# object costmap params
+object_width: 0.5 # meters
+object_length: 0.5 # meters
+pixy_dist_coef: 5551
+pixy_dist_exp: -0.459
+pixy_angle_coef: 0.2573
+
+# frontier costmap params
+min_frontier_length: 1 # meters # length of the square vicinity around a cell to check for frontier criteria
+min_frontier_ratio: 0.2
+
+# obstacle costmap params
+obstacle_buffer: 1.5
+
+# time costmap params
+time_threshold: 10 # seconds after a point is seen that the car will start weighting that point at a rate of...
+time_priority_slope: 2 # weights per second (max 100)
+
+# unsearched area costmap params
+ua_kernel_size: 3 # meters
+
+# ease costmap params
+min_ease_dist: 1
+max_ease_dist: 8
+ease_berth: 1.22173 # radians
+max_ease_ideal_dist: 3
+ease_non_ideal_attenuator: 10
+
+# view costmap params
+pixy_berth: 1.39626 # radians
+pixy_range: 4 # meters
+
+############################################################ OTHER ALGORITHM PARAMS ############################################################
+# roomba
+roomba_reset_time: 4 # seconds
+roomba_bufer: 1.5 # meters # distance from wall inside which the car will not try to navigate to
+
+# log and recall
+logging_rate: 3 # seconds between logged points
+recalling_rate: 3 # seconds before next logged point is set as navigation goal
+distance_between_waypoints: 3
+pursuing_accuracy: 0.5
+
+# explore
+explore_reset_goal_time: 4 # seconds
+
+# wall follow (patrol)
+buffer: 1 # meters # target distance from wall
+
+# gap follow (advance)
+
+# puppy guard
+guarding_steering_angle: 0.3
+guarding_speed: 4 # meters/second
+
+# navigation
+uturn_speed: -0.5 # meters/second
+idle_speed: 1.1 # meters/second
+
+############################################################ CAR PARAMS ############################################################
+
 wheelbase: 0.3302 # meters
-# width of racecar
 width: 0.2032 # meters
-
-# steering delay
-buffer_length: 5
-
-# Limits on the speed and steering angle
+buffer_length: 5 # steering delay
 max_speed: 7. #  meters/second
-max_steering_angle: 0.4189 # radians
+max_steering_angle: 0.35 # radians
 max_accel: 7.51 # meters/second^2
 max_decel: 8.26 # meters/second^2
 max_steering_vel: 3.2 # radians/second
@@ -22,101 +93,155 @@ C_S_rear: 5.4562 #.79 # 1/rad ? (estimated weight/4)
 mass: 3.47 # kg (measured on car 'lidart')
 moment_inertia: .04712 # kg m^2 (estimated as a rectangle with width and height of car and evenly distributed mass, then shifted to account for center of mass location)
 
-# The rate at which the pose and the lidar publish
-update_pose_rate: 0.001
-
-# Lidar simulation parameters
+############################################################ LIDAR PARAMS ############################################################
+update_lidar_rate: 0.001
 scan_beams: 1080
-scan_field_of_view: 6.2831853 #4.71 # radians
-
-
-# The distance from the center of the
-# rear axis (base_link) to the lidar
+scan_field_of_view: 6.2831853 # 4.71 # radians
 scan_distance_to_base_link: 0.275 # meters
+scan_std_dev: 0.01 # meters # The standard deviation of the noise applied to the lidar simulation
+map_free_threshold: 0.8 # The probability threshold for points in the occupancy grid to be considered "free" in the lidar simulator
+ttc_threshold: 0.01 # Time to collision cutoff value in the simulator
 
-# The standard deviation of the noise applied
-# to the lidar simulation
-scan_std_dev: 0.01 # meters
-
-# The probability threshold for points
-# in the occupancy grid to be considered "free".
-# Used for the lidar simulator.
-map_free_threshold: 0.8
-
-# Time to collision cutoff value
-ttc_threshold: 0.01
+############################################################ PATHING PARAMS ############################################################
 
 # Indices for mux controller
 mux_size: 5
-joy_mux_idx: 0
-key_mux_idx: 1
-random_walker_mux_idx: 2
-brake_mux_idx: 3
-nav_mux_idx: 4
-# **Add index for new planning method here**
-# **(increase mux_size accordingly)**
-new_method_mux_idx: -1
+key_mux_idx: 0
+web_mux_idx: 1
+wall_follower_mux_idx: 2
+gap_follower_mux_idx: 3
+navigator_mux_idx: 4
 
-# Enables joystick if true
-joy: true
-# Joystick indices
-joy_speed_axis: 1
-joy_angle_axis: 3
-joy_max_speed: 2. # meters/second
-# Joystick indices for toggling mux
-joy_button_idx: 4  # LB button
-key_button_idx: 6 # not sure 
-brake_button_idx: 0 # A button
-random_walk_button_idx: 1 # ? button
-nav_button_idx: 5 # RB button
-# **Add button for new planning method here**
-new_button_idx: -1
+# indices for nav mux controller
+nav_mux_size: 6
+wanderer_nav_mux_idx: 0
+returner_nav_mux_idx: 1
+navigator_nav_mux_idx: 2
+recaller_nav_mux_idx: 3
+explorer_nav_mux_idx: 4
+searcher_nav_mux_idx: 5
 
-# Keyboard characters for toggling mux
-joy_key_char: "j"
+# keyboard characters for toggling mux
 keyboard_key_char: "k"
-brake_key_char: "b"
-random_walk_key_char: "r"
-nav_key_char: "n"
-# **Add button for new planning method here**
-new_key_char: "z"
+web_key_char: "o"
+brake_key_char: " "
+wall_follow_key_char: "p"
+gap_follow_key_char: "g"
+log_key_char: "l"
+random_walk_key_char: "x"
+navigate_key_char: "n"
+recall_key_char: "r"
+return_key_char: "h"
+explore_key_char: "e"
+search_key_char: "f"
+map_clear_key_char: "m"
 
-# Keyboard driving params
-keyboard_speed: 1.8  # meters/second
-keyboard_steer_ang: .3  # radians
+# web interface strings for toggling mux
+keyboard_web_char: "keyboard"
+web_web_char: "web"
+brake_web_char: "brake"
+random_walk_web_char: "wander"
+wall_follow_web_char: "patrol"
+gap_follow_web_char: "advance"
+log_web_char: "log"
+return_web_char: "return"
+recall_web_char: "recall"
+explore_web_char: "explore"
+search_web_char: "search"
 
-# obstacle parameters
+# simulating parameters
 obstacle_size: 2
-
-# The names of topics to listen and publish to
-joy_topic: "/joy"
-drive_topic: "/drive"
-map_topic: "/map"
-distance_transform_topic: "/dt"
-scan_topic: "/scan"
-pose_topic: "/pose"
-ground_truth_pose_topic: "/gt_pose"
-odom_topic: "/odom"
-imu_topic: "/imu"
-pose_rviz_topic: "/initialpose"
-keyboard_topic: "/key"
-brake_bool_topic: "/brake_bool"
-mux_topic: "/mux"
-
-# Topic names of various drive channels
-rand_drive_topic: "/rand_drive"
-brake_drive_topic: "/brake"
-nav_drive_topic: "/nav"
-# **Add name for new planning method here**
-new_drive_topic: "/new_drive"
-
-# name of file to write collision log to 
-collision_file: "collision_file"
-
-# The names of the transformation frames published to
-map_frame: "map"
-base_frame: "base_link"
-scan_frame: "laser"
-
 broadcast_transform: true
 publish_ground_truth_pose: true
+collision_file: "collision_file" # name of file to write collision log to 
+
+############################################################ TOPIC NAMES ############################################################
+
+# simulating 
+distance_transform_topic: "/dt"
+pose_topic: "/pose"
+ground_truth_pose_topic: "/gt_pose"
+
+# sensing
+keyboard_topic: "/key"
+web_topic: "/web"
+map_topic: "/map"
+scan_topic: "/backwards_scan"
+odom_topic: "/odom"
+pose_rviz_topic: "/initialpose"
+
+# driving
+mux_topic: "/pathing/mux"
+drive_topic: "/drive"
+wall_follow_drive_topic: "/wall_follow_drive"
+gap_follow_drive_topic: "/gap_follow_drive"
+navigate_drive_topic: "/pathing/navigate_drive"
+
+# navigating
+nav_mux_topic: "/pathing/nav_mux"
+random_walker_nav_topic: "/roomba_goal"
+navigate_nav_topic: "/navigate_goal"
+return_nav_topic: "/return_goal"
+waypoints_topic: "/logged_points"
+recall_nav_topic: "/recall_goal"
+explore_nav_topic: "/explore_goal"
+search_nav_topic: "/search_goal"
+nav_goal_topic: "/pathing/move_base_simple/goal"
+
+# costmaps
+sum_costmap_topic: "/algorithms/navigation/search/sum_costmap"
+ease_costmap_topic: "/algorithms/navigation/search/ease_costmap"
+frontier_costmap_topic: "/algorithms/navigation/search/frontier_costmap"
+object_costmap_topic: "/algorithms/navigation/search/object_costmap"
+time_costmap_topic: "/algorithms/navigation/search/time_costmap"
+unsearched_area_costmap_topic: "/algorithms/navigation/search/unsearched_area_costmap"
+view_costmap_topic: "/algorithms/navigation/search/view_costmap"
+seen_points_topic: "/algorithms/navigation/search/seen_points"
+global_costmap_topic: "/pathing/move_base/global_costmap/costmap"
+
+# indicating
+r0_controller_topic: "/controllers/gpio_inputs/eleven"
+r1_controller_topic: "/controllers/gpio_inputs/twelve"
+
+r0_logging_topic: "/controllers/gpio_inputs/thirteen"
+
+r0_pathing_topic: "/controllers/gpio_inputs/twentyone"
+r1_pathing_topic: "/controllers/gpio_intputs/twentytwo"
+r2_pathing_topic: "/controllers/gpio_inputs/twentythree"
+r3_pathing_topic: "/controllers/gpio_intputs/twentyfour"
+
+w0_controller_topic: "/controllers/gpio_outputs/eleven"
+w1_controller_topic: "/controllers/gpio_outputs/twelve"
+
+w0_logging_topic: "/controllers/gpio_outputs/thirteen"
+
+w0_pathing_topic: "/controllers/gpio_outputs/twentyone"
+w1_pathing_topic: "/controllers/gpio_outputs/twentytwo"
+w2_pathing_topic: "/controllers/gpio_outputs/twentythree"
+w3_pathing_topic: "/controllers/gpio_outputs/twentyfour"
+
+left_signal_topic: "/controllers/gpio_outputs/thirtyfive"
+right_signal_topic: "/controllers/gpio_outputs/thirtysix"
+brake_lights_topic: "/controllers/gpio_outputs/thirtyseven"
+reverse_lights_topic: "/controllers/gpio_outputs/thirtyeight"
+headlights_topic: "/controllers/gpio_outputs/forty"
+
+forward_topic: "/controllers/gpio_outputs/thirtyone"
+backward_topic: "/controllers/gpio_outputs/thirtytwo"
+left_topic: "/controllers/gpio_outputs/thirtythree"
+right_topic: "/controllers/gpio_outputs/sixteen"
+
+w0_blind_spot_topic: "/controllers/gpio_outputs/eighteen"
+w1_blind_spot_topic: "/controllers/gpio_outputs/nineteen"
+
+object_detect_topic: "/controllers/gpio_outputs/twentysix"
+object_found_topic: "/controllers/gpio_outputs/twentynine"
+
+collision_topic: "/controllers/gpio_outputs/seven"
+
+############################################################ FRAME NAMES ############################################################
+
+map_frame: "map"
+base_frame: "base_link"
+scan_frame: "backwards_laser"
+odom_frame: "odom"
