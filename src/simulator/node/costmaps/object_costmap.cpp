@@ -1,8 +1,6 @@
 #include <ros/ros.h>
 
 #include <nav_msgs/OccupancyGrid.h>
-#include <pathing/PixyData.h>
-#include <pathing/PixyResolution.h>
 #include <tf/transform_listener.h>
 
 #include "math.h"
