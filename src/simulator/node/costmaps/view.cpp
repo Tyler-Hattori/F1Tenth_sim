@@ -36,7 +36,7 @@ public:
     n.getParam("seen_points_topic", seen_points_topic);
       
     view_cm = n.advertise<nav_msgs::OccupancyGrid>(costmap_topic, 10);
-    seen_points = n.advertise<pathing::seenPoints>(seen_points_topic, 10);
+    seen_points = n.advertise<f1tenth_simulator::seenPoints>(seen_points_topic, 10);
     map = n.subscribe("/map", 10, &View::map_callback, this);
      
     n.getParam("pixy_berth", berth);
@@ -59,7 +59,7 @@ public:
   }
   
   void map_callback(const nav_msgs::OccupancyGrid & cm) {
-      pathing::seenPoints view;
+      f1tenth_simulator::seenPoints view;
       nav_msgs::OccupancyGrid costmap;
       costmap.header = cm.header;
       costmap.info = cm.info;
