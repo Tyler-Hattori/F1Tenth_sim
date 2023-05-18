@@ -183,7 +183,8 @@ public:
     double highest_weight = 0.0;
 
     for (int i = 0; i < int(frontier_costmap.data.size()); i++) {
-        double weight = frontier_cm_weight*double(frontier_costmap.data[i]);
+        double weight = 0.0;
+        if (frontier_cm_recieved) weight += frontier_cm_weight*double(frontier_costmap.data[i]);
         if (ua_cm_recieved) weight += unsearched_area_cm_weight*double(unsearched_area_costmap.data[i]); 
         if (environment_mapped && environment_searched && time_cm_recieved) weight += time_cm_weight*double(time_costmap.data[i]);
         if (ease_cm_recieved) weight += ease_cm_weight*double(ease_costmap.data[i]);
