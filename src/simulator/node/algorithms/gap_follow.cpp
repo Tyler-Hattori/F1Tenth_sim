@@ -29,7 +29,7 @@ public:
         n.getParam("scan_topic", scan_topic);
         
         pub = n.advertise<ackermann_msgs::AckermannDriveStamped>("/gap_follow_drive", 1000);
-        sub = n.subscribe(scan_topic, 1000, &WallFollow::callback, this);
+        sub = n.subscribe(scan_topic, 1000, &GapFollow::callback, this);
     }
 
     void callback(const sensor_msgs::LaserScan& lidar_info) {
