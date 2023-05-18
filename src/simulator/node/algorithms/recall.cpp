@@ -41,7 +41,7 @@ public:
         idx = 0;
     }
 
-    void waypoints_callback(const pathing::waypoints& msg) {
+    void waypoints_callback(const f1tenth_simulator::waypoints& msg) {
         recall = true;
         waypoints.xs = msg.xs;
         waypoints.ys = msg.ys;
