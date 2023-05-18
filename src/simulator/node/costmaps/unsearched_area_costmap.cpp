@@ -3,7 +3,7 @@
 #include <nav_msgs/OccupancyGrid.h>
 #include <sensor_msgs/LaserScan.h>
 #include <nav_msgs/Odometry.h>
-#include <pathing/seenPoints.h>
+#include <f1tenth_simulator/seenPoints.h>
 
 #include <std_msgs/Float32.h>
 #include <std_msgs/Float64.h>
