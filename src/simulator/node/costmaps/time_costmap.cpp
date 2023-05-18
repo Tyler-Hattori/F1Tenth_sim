@@ -3,7 +3,7 @@
 #include <nav_msgs/OccupancyGrid.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/PoseStamped.h>
-#include <pathing/seenPoints.h>
+#include <f1tenth_simulator/seenPoints.h>
 
 #include "math.h"
 
