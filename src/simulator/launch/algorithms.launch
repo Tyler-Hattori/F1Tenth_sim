@@ -38,7 +38,7 @@
     
     <group ns="search">
       <!-- Launch the Searcher Node -->
-      <node pkg="f1tenth_simulator" name="searcher" type="search" output="screen" launch-prefix="xterm -e gdb --args"/>
+      <node pkg="f1tenth_simulator" name="searcher" type="search" output="screen" launch-prefix="xterm -e gdb --args">
         <rosparam command="load" file="$(find f1tenth_simulator)/params.yaml"/>
       </node>
       
