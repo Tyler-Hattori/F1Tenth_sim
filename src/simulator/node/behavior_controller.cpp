@@ -12,8 +12,8 @@
 
 #include <fstream>
 
-#include "pathing/car_state.hpp"
-#include "pathing/precompute.hpp"
+#include "f1tenth_simulator/car_state.hpp"
+#include "f1tenth_simulator/precompute.hpp"
 
 using namespace racecar_simulator;
 
