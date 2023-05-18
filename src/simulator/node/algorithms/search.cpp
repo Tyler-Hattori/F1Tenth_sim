@@ -193,11 +193,14 @@ public:
         if (weight > highest_weight) highest_weight = weight;
         weights.push_back(int(weight));
     }
-ROS_INFO_STREAM("highest weight " << highest_weight << ". " );  
+    ROS_INFO_STREAM("highest weight " << highest_weight << ". " );  
+      
     // normalize
-    for (int i = 0; i < int(weights.size()); i++) {
-        weights[i] = int(100*(double(weights[i]) / double(highest_weight)));
-    }
+      if (highest_weight > 0) {
+        for (int i = 0; i < int(weights.size()); i++) {
+            weights[i] = int(100*(double(weights[i]) / double(highest_weight)));
+        }
+      }
     sum_costmap.data = weights;
     sum_cm.publish(sum_costmap);
   }
