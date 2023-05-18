@@ -242,6 +242,5 @@ collision_topic: "/controllers/gpio_outputs/seven"
 ############################################################ FRAME NAMES ############################################################
 
 map_frame: "map"
-base_frame: "base_link"
-scan_frame: "backwards_laser"
-odom_frame: "odom"
+base_frame: "base_footprint"
+scan_frame: "laser"
