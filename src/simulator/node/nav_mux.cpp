@@ -7,7 +7,7 @@
 #include <sensor_msgs/Joy.h>
 #include <std_msgs/String.h>
 
-#include "pathing/nav_channel.h"
+#include "f1tenth_simulator/nav_channel.h"
 
 class NavMux {
 private:
