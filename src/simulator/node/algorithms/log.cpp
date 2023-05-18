@@ -30,7 +30,7 @@ public:
     std::string waypoints_topic; 
     n.getParam("waypoints_topic", waypoints_topic);
     
-    waypoints_pub = n.advertise<pathing::waypoints>("/algorithms/logged_points", 1000);
+    waypoints_pub = n.advertise<f1tenth_simulator::waypoints>("/algorithms/logged_points", 1000);
     log_command_sub = n.subscribe("/pathing/log_command", 10, &Log::log_command_callback, this);
     
     double log_time;
@@ -71,7 +71,7 @@ public:
   }
   
   void publish_waypoints() {
-    pathing::waypoints msg;
+    f1tenth_simulator::waypoints msg;
     std::vector<double> exes;
     std::vector<double> whys;
       
