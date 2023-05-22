@@ -5,6 +5,7 @@
   <node pkg="map_server" name="slam_map_server" type="map_server" args="$(arg map)"/>
   <node pkg="map_server" name="sim_map_server" type="map_server" args="$(arg map)">
     <remap from="/map" to="/sim_map"/>
+    <remap from="/map_metadata" to="/sim_map_metadata"/>
   </node>
 
   <!-- Launch the racecar model -->
