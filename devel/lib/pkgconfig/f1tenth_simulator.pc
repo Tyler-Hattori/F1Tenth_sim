@@ -3,6 +3,6 @@ prefix=/home/ubuntu/F1Tenth_sim/devel
 Name: f1tenth_simulator
 Description: Description of f1tenth_simulator
 Version: 0.0.1
-Cflags: -I/home/ubuntu/F1Tenth_sim/src/velma_search_simulator/include
+Cflags: -I/home/ubuntu/F1Tenth_sim/devel/include -I/home/ubuntu/F1Tenth_sim/src/simulator/include
 Libs: -L${prefix}/lib -lf1tenth_simulator
 Requires: message_runtime
