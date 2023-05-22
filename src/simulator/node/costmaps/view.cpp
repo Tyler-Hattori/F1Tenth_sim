@@ -36,7 +36,7 @@ public:
     n.getParam("seen_points_topic", seen_points_topic);
       
     view_cm = n.advertise<nav_msgs::OccupancyGrid>(costmap_topic, 10);
-    seen_points = n.advertise<f1tenth_simulator::seenPoints>(seen_points_topic, 10);
+    seen_points = n.advertise<pathing::seenPoints>(seen_points_topic, 10);
     map = n.subscribe("/map", 10, &View::map_callback, this);
      
     n.getParam("pixy_berth", berth);
@@ -59,22 +59,22 @@ public:
   }
   
   void map_callback(const nav_msgs::OccupancyGrid & cm) {
-      f1tenth_simulator::seenPoints view;
+      pathing::seenPoints view;
       nav_msgs::OccupancyGrid costmap;
       costmap.header = cm.header;
       costmap.info = cm.info;
      
       std::vector<signed char, std::allocator<signed char>> weights;
-      std::vector<signed char, std::allocator<signed char>> indices;
-      std::vector<signed char, std::allocator<signed char>> confidences;
+      std::vector<double> indices;
+      std::vector<double> confidences;
      
       std::vector<Obstacle> obstacles;
       
       tf::TransformListener listener;
       tf::StampedTransform cam_to_map;
       ros::Time t = ros::Time(0);
-      listener.waitForTransform("map", "base_link", t, ros::Duration(30));
-      listener.lookupTransform("map", "base_link", t, cam_to_map);
+      listener.waitForTransform("map", "base_footprint", t, ros::Duration(30));
+      listener.lookupTransform("map", "base_footprint", t, cam_to_map);
       double th = tf::getYaw(cam_to_map.getRotation());
       double car_x = cam_to_map.getOrigin().getX(); //- 2*0.4318*cos(th);
       double car_y = cam_to_map.getOrigin().getY(); //- 2*0.4318*sin(th);
@@ -109,6 +109,7 @@ public:
                signed char confidence = weight(distance_from_car, angle_from_car);
                weights.push_back(confidence);
                indices.push_back(i);
+               //ROS_INFO_STREAM("i: " << i << " (int)(signed char)i: " << (int)(signed char)i);
                confidences.push_back(confidence);
           }
          
