@@ -128,7 +128,7 @@ public:
       binary_cm.data = weights;
   }
     
-  void view_callback(const pathing::seenPoints & seen_points) {
+  void view_callback(const f1tenth_simulator::seenPoints & seen_points) {
     if (int(binary_cm.data.size()) > 0) {
       std::vector<signed char, std::allocator<signed char>> weights;
       weights = binary_cm.data;
