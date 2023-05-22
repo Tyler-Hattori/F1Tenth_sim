@@ -21,6 +21,7 @@ object_length: 0.5 # meters
 pixy_dist_coef: 5551
 pixy_dist_exp: -0.459
 pixy_angle_coef: 0.2573
+stopping_distance: 30 #centimeters
 
 # frontier costmap params
 min_frontier_length: 1 # meters # length of the square vicinity around a cell to check for frontier criteria
