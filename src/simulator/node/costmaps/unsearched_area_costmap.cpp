@@ -107,15 +107,28 @@ public:
       
       std::vector<signed char, std::allocator<signed char>> weights;
       
-      for (int i = 0; i < int(cm.data.size()); i++) {
+      for (int i = 0; i < int(cm.data.size()); i = i + attentiveness) {
           if (cm.data[i] == 0) weights.push_back(100);
           else weights.push_back(-100);
+          for (int j = 0; j < attentiveness - 1; j++) { weights.push_back(0); }
+      }
+      
+      int discrepancy = int(cm.data.size()) - int(weights.size());
+      if (discrepancy > 0) {
+         for (int i = 0; i < discrepancy; i++) {
+            weights.push_back(0);
+         }
+      }
+      else if (discrepancy < 0) {
+         for (int i = 0; i < -discrepancy; i++) {
+            weights.pop_back();
+         }
       }
       
       binary_cm.data = weights;
   }
     
-  void view_callback(const f1tenth_simulator::seenPoints & seen_points) {
+  void view_callback(const pathing::seenPoints & seen_points) {
     if (int(binary_cm.data.size()) > 0) {
       std::vector<signed char, std::allocator<signed char>> weights;
       weights = binary_cm.data;
@@ -128,7 +141,7 @@ public:
         history.push_back(new_memory);
       }
       
-      ROS_INFO_STREAM("number of seen points: " << int(history.size()));
+      //ROS_INFO_STREAM("number of seen points: " << int(history.size()));
       for (int i = int(history.size()) - 1; i >= 0; i--) {
         int cell = history[i].idx; //world_to_cell(history[i].x, history[i].y);
         if (weights[cell] == 100 || weights[cell] == -100) {
