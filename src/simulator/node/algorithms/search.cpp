@@ -27,7 +27,7 @@ private:
   ros::Subscriber object_cm;
   ros::Subscriber unsearched_area_cm;
   ros::Subscriber frontier_cm;
-  // ros::Subscriber bucket;
+  ros::Subscriber bucket;
  
   nav_msgs::OccupancyGrid sum_costmap;
   nav_msgs::OccupancyGrid time_costmap;
@@ -58,7 +58,8 @@ private:
   double a;
   double b;
   double c;
-  
+  double stopping_distance;
+    
   double map_origin_y;
   double map_origin_x;
     
@@ -81,7 +82,7 @@ public:
     ease_cm = n.subscribe(ease_costmap, 10, &Search::ease_cm_callback, this);
     object_cm = n.subscribe(object_costmap, 10, &Search::object_cm_callback, this);
     frontier_cm = n.subscribe(frontier_costmap, 10, &Search::frontier_cm_callback, this);
-    // bucket = n.subscribe("/bucket_visual", 10, &Search::bucket_callback, this);
+    bucket = n.subscribe("/bucket_visual", 10, &Search::bucket_callback, this);
     
     n.getParam("search_goal_update_time", pub_time);
     timer = n.createTimer(ros::Duration(pub_time), &Search::timer_callback, this);
@@ -95,6 +96,7 @@ public:
     n.getParam("pixy_dist_coef", a);
     n.getParam("pixy_dist_exp", b);
     n.getParam("pixy_angle_coef", c);
+    n.getParam("stopping_distance", stopping_distance);
      
     environment_mapped = false;  
     environment_searched = false;
@@ -111,7 +113,7 @@ public:
     map_origin_y = 0.0;
   }
   
-  /*void tranform_and_publish(int height, int width, int x_offset, int y_offset) {
+  void tranform_and_publish(int height, int width, int x_offset, int y_offset) {
       double block_area = height*width;
       double pixy_distance = a*pow(block_area, b);
       double pixy_angle = (-x_offset+159)*(c*M_PI/180);
@@ -132,8 +134,8 @@ public:
       
       //ROS_INFO_STREAM("car_x: " << car_x << ". car_x: " << car_y);
       
-      double cell_x = car_x + ((pixy_distance+43)/100)*(cos(th + pixy_angle));// - map_origin_x;
-      double cell_y = car_y + ((pixy_distance+43)/100)*(sin(th + pixy_angle));// - map_origin_y;
+      double cell_x = car_x + ((pixy_distance+43-stopping_distance)/100)*(cos(th + pixy_angle));// - map_origin_x;
+      double cell_y = car_y + ((pixy_distance+43-stopping_distance)/100)*(sin(th + pixy_angle));// - map_origin_y;
       //target_cell = int( (int(cell_y/map_resolution)-1)*map_width + int(cell_x/map_resolution) - 1);
       //ROS_INFO_STREAM("origin_x: " << map_origin_x << ". origin_y: " << map_origin_y);
       
@@ -146,13 +148,13 @@ public:
       nav_goal.publish(goal);
   }
     
-  void bucket_callback(const pathing::PixyData & msg) {
+  void bucket_callback(const f1tenth_simulator::PixyData & msg) {
       if (!msg.blocks.empty() && int(msg.blocks[0].roi.height*msg.blocks[0].roi.width) != 0) {
           found = true;
           tranform_and_publish((int)msg.blocks[0].roi.height, (int)msg.blocks[0].roi.width, (int)msg.blocks[0].roi.x_offset, (int)msg.blocks[0].roi.y_offset);
       }
       //else found = false;
-  } */
+  }
   
   void timer_callback(const ros::TimerEvent&) {
       if (ease_cm_recieved && !found) {
@@ -179,29 +181,26 @@ public:
   }
   
   void apply_weights() {
-    std::vector<signed char, std::allocator<signed char>> weights;
+    std::vector<double> weights;
     double highest_weight = 0.0;
 
     for (int i = 0; i < int(frontier_costmap.data.size()); i++) {
-        double weight = 0.0;
-        if (frontier_cm_recieved) weight += frontier_cm_weight*double(frontier_costmap.data[i]);
+        double weight = frontier_cm_weight*double(frontier_costmap.data[i]);
         if (ua_cm_recieved) weight += unsearched_area_cm_weight*double(unsearched_area_costmap.data[i]); 
         if (environment_mapped && environment_searched && time_cm_recieved) weight += time_cm_weight*double(time_costmap.data[i]);
         if (ease_cm_recieved) weight += ease_cm_weight*double(ease_costmap.data[i]);
         if (obstacle_cm_recieved) weight *= double(object_costmap.data[i]); // obstacle costmap
             
         if (weight > highest_weight) highest_weight = weight;
-        weights.push_back(int(weight));
+        weights.push_back(weight);
     }
-    ROS_INFO_STREAM("highest weight " << highest_weight << ". " );  
-      
+  
     // normalize
-      if (highest_weight > 0) {
-        for (int i = 0; i < int(weights.size()); i++) {
-            weights[i] = int(100*(double(weights[i]) / double(highest_weight)));
-        }
-      }
-    sum_costmap.data = weights;
+    std::vector<signed char, std::allocator<signed char>> normalized_weights;
+    for (int i = 0; i < int(weights.size()); i++) {
+        normalized_weights.push_back( (signed char)(100 * ( weights[i] / highest_weight )) );
+    }
+    sum_costmap.data = normalized_weights;
     sum_cm.publish(sum_costmap);
   }
     
