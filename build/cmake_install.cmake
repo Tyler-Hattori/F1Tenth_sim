@@ -131,7 +131,10 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/ubuntu/F1Tenth_sim/build/gtest/cmake_install.cmake")
+  include("/home/ubuntu/F1Tenth_sim/build/slam/slam_toolbox_msgs/cmake_install.cmake")
   include("/home/ubuntu/F1Tenth_sim/build/simulator/cmake_install.cmake")
+  include("/home/ubuntu/F1Tenth_sim/build/slam/slam_toolbox/cmake_install.cmake")
+  include("/home/ubuntu/F1Tenth_sim/build/slam/slam_toolbox_rviz/cmake_install.cmake")
   include("/home/ubuntu/F1Tenth_sim/build/navigation/cmake_install.cmake")
 
 endif()

@@ -39,7 +39,7 @@ add_custom_target(_f1tenth_simulator_generate_messages_check_deps_${_filename}
 
 get_filename_component(_filename "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg" NAME_WE)
 add_custom_target(_f1tenth_simulator_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "f1tenth_simulator" "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg" "sensor_msgs/RegionOfInterest:f1tenth_simulator/PixyBlock:std_msgs/Header"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "f1tenth_simulator" "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg" "f1tenth_simulator/PixyBlock:std_msgs/Header:sensor_msgs/RegionOfInterest"
 )
 
 get_filename_component(_filename "/home/ubuntu/F1Tenth_sim/src/simulator/msg/waypoints.msg" NAME_WE)
@@ -85,7 +85,7 @@ _generate_msg_cpp(f1tenth_simulator
 _generate_msg_cpp(f1tenth_simulator
   "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/RegionOfInterest.msg;/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/RegionOfInterest.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/f1tenth_simulator
 )
 _generate_msg_cpp(f1tenth_simulator
@@ -166,7 +166,7 @@ _generate_msg_eus(f1tenth_simulator
 _generate_msg_eus(f1tenth_simulator
   "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/RegionOfInterest.msg;/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/RegionOfInterest.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/f1tenth_simulator
 )
 _generate_msg_eus(f1tenth_simulator
@@ -247,7 +247,7 @@ _generate_msg_lisp(f1tenth_simulator
 _generate_msg_lisp(f1tenth_simulator
   "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/RegionOfInterest.msg;/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/RegionOfInterest.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/f1tenth_simulator
 )
 _generate_msg_lisp(f1tenth_simulator
@@ -328,7 +328,7 @@ _generate_msg_nodejs(f1tenth_simulator
 _generate_msg_nodejs(f1tenth_simulator
   "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/RegionOfInterest.msg;/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/RegionOfInterest.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/f1tenth_simulator
 )
 _generate_msg_nodejs(f1tenth_simulator
@@ -409,7 +409,7 @@ _generate_msg_py(f1tenth_simulator
 _generate_msg_py(f1tenth_simulator
   "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/RegionOfInterest.msg;/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/RegionOfInterest.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/f1tenth_simulator
 )
 _generate_msg_py(f1tenth_simulator

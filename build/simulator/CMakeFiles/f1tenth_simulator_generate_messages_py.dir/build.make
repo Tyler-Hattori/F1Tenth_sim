@@ -87,9 +87,9 @@ simulator/CMakeFiles/f1tenth_simulator_generate_messages_py: /home/ubuntu/F1Tent
 
 /home/ubuntu/F1Tenth_sim/devel/lib/python3/dist-packages/f1tenth_simulator/msg/_PixyData.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 /home/ubuntu/F1Tenth_sim/devel/lib/python3/dist-packages/f1tenth_simulator/msg/_PixyData.py: /home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg
-/home/ubuntu/F1Tenth_sim/devel/lib/python3/dist-packages/f1tenth_simulator/msg/_PixyData.py: /opt/ros/noetic/share/sensor_msgs/msg/RegionOfInterest.msg
 /home/ubuntu/F1Tenth_sim/devel/lib/python3/dist-packages/f1tenth_simulator/msg/_PixyData.py: /home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg
 /home/ubuntu/F1Tenth_sim/devel/lib/python3/dist-packages/f1tenth_simulator/msg/_PixyData.py: /opt/ros/noetic/share/std_msgs/msg/Header.msg
+/home/ubuntu/F1Tenth_sim/devel/lib/python3/dist-packages/f1tenth_simulator/msg/_PixyData.py: /opt/ros/noetic/share/sensor_msgs/msg/RegionOfInterest.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/F1Tenth_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating Python from MSG f1tenth_simulator/PixyData"
 	cd /home/ubuntu/F1Tenth_sim/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg -If1tenth_simulator:/home/ubuntu/F1Tenth_sim/src/simulator/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Inav_msgs:/opt/ros/noetic/share/nav_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -Iactionlib_msgs:/opt/ros/noetic/share/actionlib_msgs/cmake/../msg -p f1tenth_simulator -o /home/ubuntu/F1Tenth_sim/devel/lib/python3/dist-packages/f1tenth_simulator/msg
 

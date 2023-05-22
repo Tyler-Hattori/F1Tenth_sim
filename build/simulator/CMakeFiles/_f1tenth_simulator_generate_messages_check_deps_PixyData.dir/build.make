@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/ubuntu/F1Tenth_sim/build
 include simulator/CMakeFiles/_f1tenth_simulator_generate_messages_check_deps_PixyData.dir/progress.make
 
 simulator/CMakeFiles/_f1tenth_simulator_generate_messages_check_deps_PixyData:
-	cd /home/ubuntu/F1Tenth_sim/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py f1tenth_simulator /home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg sensor_msgs/RegionOfInterest:f1tenth_simulator/PixyBlock:std_msgs/Header
+	cd /home/ubuntu/F1Tenth_sim/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py f1tenth_simulator /home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg f1tenth_simulator/PixyBlock:std_msgs/Header:sensor_msgs/RegionOfInterest
 
 _f1tenth_simulator_generate_messages_check_deps_PixyData: simulator/CMakeFiles/_f1tenth_simulator_generate_messages_check_deps_PixyData
 _f1tenth_simulator_generate_messages_check_deps_PixyData: simulator/CMakeFiles/_f1tenth_simulator_generate_messages_check_deps_PixyData.dir/build.make

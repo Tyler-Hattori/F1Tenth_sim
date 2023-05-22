@@ -1,2 +1,2 @@
-navigation:simulator
+navigation:simulator:slam/slam_toolbox:slam/slam_toolbox_msgs:slam/slam_toolbox_rviz
 -DCATKIN_DEVEL_PREFIX=/home/ubuntu/F1Tenth_sim/devel -DCMAKE_INSTALL_PREFIX=/home/ubuntu/F1Tenth_sim/install -G Unix Makefiles

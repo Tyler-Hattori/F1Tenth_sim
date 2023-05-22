@@ -86,9 +86,9 @@ simulator/CMakeFiles/f1tenth_simulator_generate_messages_lisp: /home/ubuntu/F1Te
 
 /home/ubuntu/F1Tenth_sim/devel/share/common-lisp/ros/f1tenth_simulator/msg/PixyData.lisp: /opt/ros/noetic/lib/genlisp/gen_lisp.py
 /home/ubuntu/F1Tenth_sim/devel/share/common-lisp/ros/f1tenth_simulator/msg/PixyData.lisp: /home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg
-/home/ubuntu/F1Tenth_sim/devel/share/common-lisp/ros/f1tenth_simulator/msg/PixyData.lisp: /opt/ros/noetic/share/sensor_msgs/msg/RegionOfInterest.msg
 /home/ubuntu/F1Tenth_sim/devel/share/common-lisp/ros/f1tenth_simulator/msg/PixyData.lisp: /home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyBlock.msg
 /home/ubuntu/F1Tenth_sim/devel/share/common-lisp/ros/f1tenth_simulator/msg/PixyData.lisp: /opt/ros/noetic/share/std_msgs/msg/Header.msg
+/home/ubuntu/F1Tenth_sim/devel/share/common-lisp/ros/f1tenth_simulator/msg/PixyData.lisp: /opt/ros/noetic/share/sensor_msgs/msg/RegionOfInterest.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/ubuntu/F1Tenth_sim/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating Lisp code from f1tenth_simulator/PixyData.msg"
 	cd /home/ubuntu/F1Tenth_sim/build/simulator && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genlisp/cmake/../../../lib/genlisp/gen_lisp.py /home/ubuntu/F1Tenth_sim/src/simulator/msg/PixyData.msg -If1tenth_simulator:/home/ubuntu/F1Tenth_sim/src/simulator/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Inav_msgs:/opt/ros/noetic/share/nav_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -Iactionlib_msgs:/opt/ros/noetic/share/actionlib_msgs/cmake/../msg -p f1tenth_simulator -o /home/ubuntu/F1Tenth_sim/devel/share/common-lisp/ros/f1tenth_simulator/msg
 
