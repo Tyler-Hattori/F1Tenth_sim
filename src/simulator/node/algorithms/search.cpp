@@ -27,7 +27,7 @@ private:
   ros::Subscriber object_cm;
   ros::Subscriber unsearched_area_cm;
   ros::Subscriber frontier_cm;
-  ros::Subscriber bucket;
+  // ros::Subscriber bucket;
  
   nav_msgs::OccupancyGrid sum_costmap;
   nav_msgs::OccupancyGrid time_costmap;
@@ -54,11 +54,11 @@ private:
   bool time_cm_recieved;
   bool obstacle_cm_recieved;
     
-  bool found;
+  /*bool found;
   double a;
   double b;
   double c;
-  double stopping_distance;
+  double stopping_distance;*/
     
   double map_origin_y;
   double map_origin_x;
@@ -82,7 +82,7 @@ public:
     ease_cm = n.subscribe(ease_costmap, 10, &Search::ease_cm_callback, this);
     object_cm = n.subscribe(object_costmap, 10, &Search::object_cm_callback, this);
     frontier_cm = n.subscribe(frontier_costmap, 10, &Search::frontier_cm_callback, this);
-    bucket = n.subscribe("/bucket_visual", 10, &Search::bucket_callback, this);
+    // bucket = n.subscribe("/bucket_visual", 10, &Search::bucket_callback, this);
     
     n.getParam("search_goal_update_time", pub_time);
     timer = n.createTimer(ros::Duration(pub_time), &Search::timer_callback, this);
@@ -93,10 +93,10 @@ public:
     n.getParam("unsearched_area_cm_weight", unsearched_area_cm_weight);
     n.getParam("frontier_cm_weight", frontier_cm_weight);
       
-    n.getParam("pixy_dist_coef", a);
+    /*n.getParam("pixy_dist_coef", a);
     n.getParam("pixy_dist_exp", b);
     n.getParam("pixy_angle_coef", c);
-    n.getParam("stopping_distance", stopping_distance);
+    n.getParam("stopping_distance", stopping_distance);*/
      
     environment_mapped = false;  
     environment_searched = false;
@@ -113,7 +113,7 @@ public:
     map_origin_y = 0.0;
   }
   
-  void tranform_and_publish(int height, int width, int x_offset, int y_offset) {
+  /*void tranform_and_publish(int height, int width, int x_offset, int y_offset) {
       double block_area = height*width;
       double pixy_distance = a*pow(block_area, b);
       double pixy_angle = (-x_offset+159)*(c*M_PI/180);
@@ -154,10 +154,10 @@ public:
           tranform_and_publish((int)msg.blocks[0].roi.height, (int)msg.blocks[0].roi.width, (int)msg.blocks[0].roi.x_offset, (int)msg.blocks[0].roi.y_offset);
       }
       //else found = false;
-  }
+  }*/
   
   void timer_callback(const ros::TimerEvent&) {
-      if (ease_cm_recieved && !found) {
+      if (ease_cm_recieved) {
         geometry_msgs::PoseStamped goal;
         sum_costmap.header = ease_costmap.header;
         sum_costmap.info = ease_costmap.info;
