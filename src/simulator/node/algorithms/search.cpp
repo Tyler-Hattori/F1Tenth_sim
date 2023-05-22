@@ -107,7 +107,7 @@ public:
     obstacle_cm_recieved = false;
     time_cm_recieved = false;
       
-    found = false;
+    //found = false;
       
     map_origin_x = 0.0;
     map_origin_y = 0.0;
