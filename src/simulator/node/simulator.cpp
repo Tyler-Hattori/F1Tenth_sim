@@ -227,7 +227,7 @@ public:
 
         // Start a subscriber to listen to new maps
         map_sub = n.subscribe(map_topic, 1, &RacecarSimulator::map_callback, this);
-	sim_map_sub = n.Subscribe(sim_map_topic, 1, &RacecarSimulator::sim_map_callback, this);
+	sim_map_sub = n.subscribe(sim_map_topic, 1, &RacecarSimulator::sim_map_callback, this);
 
         // Start a subscriber to listen to pose messages
         pose_sub = n.subscribe(pose_topic, 1, &RacecarSimulator::pose_callback, this);
