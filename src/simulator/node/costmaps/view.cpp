@@ -59,7 +59,7 @@ public:
   }
   
   void map_callback(const nav_msgs::OccupancyGrid & cm) {
-      pathing::seenPoints view;
+      f1tenth_simulator::seenPoints view;
       nav_msgs::OccupancyGrid costmap;
       costmap.header = cm.header;
       costmap.info = cm.info;
