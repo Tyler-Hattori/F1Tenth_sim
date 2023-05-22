@@ -1,2 +1,2 @@
-int8[] indices
-int8[] confidences
+float64[] indices
+float64[] confidences
