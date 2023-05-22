@@ -11,6 +11,11 @@
   <node pkg="f1tenth_simulator" name="f1tenth_simulator" type="simulator" output="screen">
     <rosparam command="load" file="$(find f1tenth_simulator)/params.yaml"/>
   </node>
+  
+  <group ns="mapping">
+    <!-- slam -->
+    <include file="$(find slam_toolbox)/launch/online_async.launch"/>
+  </group>
 
   <!-- Launch the Keyboard Node -->
   <node pkg="f1tenth_simulator" name="keyboard" type="keyboard" output="screen">
