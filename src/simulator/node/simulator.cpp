@@ -76,6 +76,7 @@ private:
 
     // Listen for a map
     ros::Subscriber map_sub;
+    ros::Subscriber sim_map_sub;
     bool map_exists = false;
 
     // Listen for updates to the pose
@@ -142,10 +143,11 @@ public:
         previous_seconds = ros::Time::now().toSec();
 
         // Get the topic names
-        std::string drive_topic, map_topic, scan_topic, pose_topic, gt_pose_topic, 
+        std::string drive_topic, map_topic, sim_map_topic, scan_topic, pose_topic, gt_pose_topic, 
         pose_rviz_topic, odom_topic, imu_topic;
         n.getParam("drive_topic", drive_topic);
         n.getParam("map_topic", map_topic);
+	n.getParam("sim_map_topic", sim_map_topic);
         n.getParam("scan_topic", scan_topic);
         n.getParam("pose_topic", pose_topic);
         n.getParam("odom_topic", odom_topic);
@@ -225,6 +227,7 @@ public:
 
         // Start a subscriber to listen to new maps
         map_sub = n.subscribe(map_topic, 1, &RacecarSimulator::map_callback, this);
+	sim_map_sub = n.Subscribe(sim_map_topic, 1, &RacecarSimulator::sim_map_callback, this);
 
         // Start a subscriber to listen to pose messages
         pose_sub = n.subscribe(pose_topic, 1, &RacecarSimulator::pose_callback, this);
@@ -573,21 +576,9 @@ public:
             clear_obs_clicked = false;
         }
     }
-
-        void map_callback(const nav_msgs::OccupancyGrid & msg) {
-            // Fetch the map parameters
-            size_t height = msg.info.height;
-            size_t width = msg.info.width;
-            double resolution = msg.info.resolution;
-            // Convert the ROS origin to a pose
-            Pose2D origin;
-            origin.x = msg.info.origin.position.x;
-            origin.y = msg.info.origin.position.y;
-            geometry_msgs::Quaternion q = msg.info.origin.orientation;
-            tf2::Quaternion quat(q.x, q.y, q.z, q.w);
-            origin.theta = tf2::impl::getYaw(quat);
-
-            // Convert the map to probability values
+	
+	void sim_map_callback(const nav_msgs::OccupancyGrid & msg) {
+	    // Convert the map to probability values
             std::vector<double> map(msg.data.size());
             for (size_t i = 0; i < height * width; i++) {
                 if (msg.data[i] > 100 or msg.data[i] < 0) {
@@ -605,7 +596,22 @@ public:
                 resolution,
                 origin,
                 map_free_threshold);
-            map_exists = true;
+            map_exists = true;	
+	}
+
+        void map_callback(const nav_msgs::OccupancyGrid & msg) {
+            // Fetch the map parameters
+            size_t height = msg.info.height;
+            size_t width = msg.info.width;
+            double resolution = msg.info.resolution;
+            // Convert the ROS origin to a pose
+            Pose2D origin;
+            origin.x = msg.info.origin.position.x;
+            origin.y = msg.info.origin.position.y;
+            geometry_msgs::Quaternion q = msg.info.origin.orientation;
+            tf2::Quaternion quat(q.x, q.y, q.z, q.w);
+            origin.theta = tf2::impl::getYaw(quat);
+
         }
 
         /// ---------------------- PUBLISHING HELPER FUNCTIONS ----------------------
