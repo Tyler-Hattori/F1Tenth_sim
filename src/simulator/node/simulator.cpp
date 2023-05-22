@@ -578,6 +578,18 @@ public:
     }
 	
 	void sim_map_callback(const nav_msgs::OccupancyGrid & msg) {
+            // Fetch the map parameters
+            size_t height = msg.info.height;
+            size_t width = msg.info.width;
+            double resolution = msg.info.resolution;
+            // Convert the ROS origin to a pose
+            Pose2D origin;
+            origin.x = msg.info.origin.position.x;
+            origin.y = msg.info.origin.position.y;
+            geometry_msgs::Quaternion q = msg.info.origin.orientation;
+            tf2::Quaternion quat(q.x, q.y, q.z, q.w);
+            origin.theta = tf2::impl::getYaw(quat);
+		
 	    // Convert the map to probability values
             std::vector<double> map(msg.data.size());
             for (size_t i = 0; i < height * width; i++) {
@@ -600,17 +612,6 @@ public:
 	}
 
         void map_callback(const nav_msgs::OccupancyGrid & msg) {
-            // Fetch the map parameters
-            size_t height = msg.info.height;
-            size_t width = msg.info.width;
-            double resolution = msg.info.resolution;
-            // Convert the ROS origin to a pose
-            Pose2D origin;
-            origin.x = msg.info.origin.position.x;
-            origin.y = msg.info.origin.position.y;
-            geometry_msgs::Quaternion q = msg.info.origin.orientation;
-            tf2::Quaternion quat(q.x, q.y, q.z, q.w);
-            origin.theta = tf2::impl::getYaw(quat);
 
         }
 
